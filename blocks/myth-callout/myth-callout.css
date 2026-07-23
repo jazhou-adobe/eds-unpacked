@@ -1,0 +1,21 @@
+.myth-callout {
+  background-color: var(--light-color);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+
+.myth-callout-label {
+  font-family: var(--heading-font-family);
+  font-size: var(--body-font-size-s);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--link-color);
+  margin: 0 0 8px;
+}
+
+.myth-callout p:not(.myth-callout-label) {
+  margin: 0;
+  color: var(--text-color);
+}
