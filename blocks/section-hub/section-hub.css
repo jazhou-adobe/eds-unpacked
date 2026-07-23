@@ -1,0 +1,30 @@
+.section-hub-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.section-hub-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.section-hub-item a {
+  font-size: var(--body-font-size-m);
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.section-hub-item a:hover {
+  color: var(--link-hover-color);
+}
+
+.section-hub-item-meta {
+  font-size: var(--body-font-size-xs);
+  color: var(--dark-color);
+  white-space: nowrap;
+}
