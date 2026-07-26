@@ -1,27 +1,162 @@
+/* cards: cream feature cards (DESIGN.md feature-card) */
 .cards > ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (width >= 600px) {
+  .cards > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .cards > ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background-color: var(--canvas);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.cards .cards-card-body {
-  margin: 16px;
+.cards > ul > li:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
 }
 
-.cards .cards-card-image {
-  line-height: 0;
+.cards > ul > li .cards-card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
-.cards > ul > li img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+.cards > ul > li .cards-card-body:empty {
+  display: none;
+}
+
+.cards > ul > li .cards-card-body h3 {
+  margin: 0 0 var(--space-sm);
+  font: var(--display-sm);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.cards > ul > li .cards-card-body p {
+  margin: 0 0 var(--space-md);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.cards > ul > li .cards-card-body p:last-child {
+  margin: auto 0 0;
+  padding-top: var(--space-xs);
+}
+
+/* tile link: coral text link with arrow affordance */
+.cards > ul > li .cards-card-body a:any-link {
+  align-self: flex-start;
+  color: var(--coral-active);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cards > ul > li .cards-card-body a:any-link::after {
+  content: '\2192';
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform 0.2s ease;
+}
+
+.cards > ul > li .cards-card-body a:hover::after {
+  transform: translateX(4px);
+}
+
+.cards > ul > li .cards-card-body a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* illustration band: soft cream field, artwork centered, zooms on hover */
+.cards > ul > li .cards-card-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 10;
+  margin: calc(var(--space-xl) * -1) calc(var(--space-xl) * -1) var(--space-lg);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background-color: var(--surface-soft);
+  overflow: hidden;
+}
+
+.cards > ul > li .cards-card-image img {
+  max-width: 78%;
+  max-height: 78%;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  transition: transform 0.3s ease;
+}
+
+.cards > ul > li:hover .cards-card-image img {
+  transform: scale(1.05);
+}
+
+/* cards inside dark bands become elevated dark surfaces */
+.section.dark .cards > ul > li {
+  border-color: var(--surface-dark-elevated);
+  background-color: var(--surface-dark-elevated);
+}
+
+.section.dark .cards > ul > li .cards-card-image {
+  background-color: var(--surface-dark-soft);
+}
+
+.section.dark .cards > ul > li .cards-card-body h3 {
+  color: var(--on-dark);
+}
+
+.section.dark .cards > ul > li .cards-card-body p {
+  color: var(--on-dark-soft);
+}
+
+.section.dark .cards > ul > li .cards-card-body a:any-link {
+  color: var(--coral);
+}
+
+/* over the fixed video film: glass cards, illustration hidden, light text */
+body.home.has-video-bg .cards > ul > li {
+  border-color: rgb(255 255 255 / 12%);
+  background-color: rgb(24 23 21 / 72%);
+  backdrop-filter: blur(8px);
+}
+
+body.home.has-video-bg .cards > ul > li .cards-card-image {
+  display: none;
+}
+
+body.home.has-video-bg .cards > ul > li .cards-card-body h3 {
+  color: var(--on-dark);
+}
+
+body.home.has-video-bg .cards > ul > li .cards-card-body p {
+  color: var(--on-dark-soft);
+}
+
+body.home.has-video-bg .cards > ul > li .cards-card-body a:any-link {
+  color: var(--coral);
 }

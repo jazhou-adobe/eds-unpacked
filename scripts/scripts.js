@@ -143,6 +143,39 @@ function decorateButtons(main) {
 }
 
 /**
+ * Applies section metadata (authored as a section-metadata block) to its
+ * section: `style` values become section classes, everything else datasets.
+ * Must run after decorateSections (wrapping) and before decorateBlocks so the
+ * metadata block itself is never decorated.
+ * @param {HTMLElement} main The main container element
+ */
+function decorateSectionMetadata(main) {
+  main.querySelectorAll('.section div.section-metadata').forEach((metaEl) => {
+    const section = metaEl.closest('.section');
+    [...metaEl.children].forEach((row) => {
+      const [keyEl, valueEl] = [...row.children];
+      if (!keyEl || !valueEl) return;
+      const key = keyEl.textContent.trim().toLowerCase();
+      const value = valueEl.textContent.trim();
+      if (key === 'style') {
+        value.split(',')
+          .map((style) => style.trim().toLowerCase().replaceAll(' ', '-'))
+          .filter(Boolean)
+          .forEach((cls) => section.classList.add(cls));
+      } else {
+        section.dataset[key] = value;
+      }
+    });
+    const wrapper = metaEl.parentElement;
+    if (wrapper && wrapper !== section && !wrapper.classList.contains('default-content-wrapper')) {
+      wrapper.remove();
+    } else {
+      metaEl.remove();
+    }
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -151,6 +184,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
+  decorateSectionMetadata(main);
   decorateBlocks(main);
   decorateButtons(main);
 }
@@ -180,6 +214,71 @@ async function loadEager(doc) {
 }
 
 /**
+ * Adds progressive interaction effects: scroll reveals for sections below the
+ * first, and a subtle pointer tilt on the hero code window. Runs in the lazy
+ * phase; content stays fully visible without it.
+ * @param {Element} main The main element
+ */
+function initInteractions(main) {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const wrappers = [...main.querySelectorAll('.section ~ .section > div')];
+  if (wrappers.length && !reduced.matches && 'IntersectionObserver' in window) {
+    wrappers.forEach((el, i) => {
+      el.classList.add('reveal');
+      el.style.setProperty('--reveal-delay', `${Math.min(i % 3, 2) * 70}ms`);
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    wrappers.forEach((el) => observer.observe(el));
+  }
+
+  const hero = main.querySelector('.hero');
+  const win = main.querySelector('.hero-code-window');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (hero && win && finePointer.matches && !reduced.matches) {
+    hero.addEventListener('mousemove', (e) => {
+      const rect = win.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
+      const dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
+      win.style.setProperty('--ry', `${(dx * 5).toFixed(2)}deg`);
+      win.style.setProperty('--rx', `${(-dy * 5).toFixed(2)}deg`);
+    });
+    hero.addEventListener('mouseleave', () => {
+      win.style.setProperty('--rx', '0deg');
+      win.style.setProperty('--ry', '0deg');
+    });
+  }
+
+  // hero parallax: content rises and fades as it scrolls off the fixed film
+  const heroContent = main.querySelector('.hero > div');
+  if (heroContent && !reduced.matches) {
+    let ticking = false;
+    const parallax = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const vh = window.innerHeight || 1;
+      const p = Math.min(y / vh, 1);
+      heroContent.style.transform = `translate3d(0, ${(y * 0.3).toFixed(1)}px, 0)`;
+      heroContent.style.opacity = `${Math.max(1 - p * 1.15, 0).toFixed(3)}`;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(parallax);
+      }
+    }, { passive: true });
+    parallax();
+  }
+}
+
+/**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
@@ -188,6 +287,7 @@ async function loadLazy(doc) {
 
   const main = doc.querySelector('main');
   await loadSections(main);
+  initInteractions(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;

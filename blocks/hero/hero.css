@@ -1,37 +1,490 @@
-.hero-container .hero-wrapper {
-  max-width: unset;
-  padding: 0;
+/* hero: split band — serif display left, dark code window right with coral glow.
+   On the home template the whole section becomes a cinematic abyss scene:
+   network canvas, aurora orbs, film grain, staggered headline. */
+.hero > div {
+  display: grid;
+  gap: var(--space-xxl);
+  align-items: center;
 }
 
-.hero {
-  position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
+.hero > div > div:first-child {
+  max-width: 560px;
 }
 
 .hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
+  margin: 0 0 var(--space-lg);
+  font: var(--display-xl);
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
-.hero picture {
+.hero h1 em {
+  color: var(--coral);
+}
+
+.hero p {
+  max-width: 52ch;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--body-strong);
+}
+
+.hero p.button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+/* kicker: mono domain tag above the headline */
+.hero .hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero .hero-kicker::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background-color: var(--coral);
+}
+
+/* dark editor window */
+.hero-code-window {
+  position: relative;
+  border-radius: var(--radius-xl);
+  background-color: var(--surface-dark);
+  box-shadow:
+    0 24px 64px rgb(24 23 21 / 28%),
+    0 4px 16px rgb(24 23 21 / 16%);
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out;
+}
+
+/* coral glow bleeding from behind the window */
+.hero-code-window::before {
+  content: '';
   position: absolute;
+  inset: -14% -12%;
   z-index: -1;
-  inset: 0;
-  object-fit: cover;
-  box-sizing: border-box;
+  border-radius: 32px;
+  background: radial-gradient(closest-side, rgb(204 120 92 / 34%), transparent 72%);
+  filter: blur(12px);
 }
 
-.hero img {
+.hero-code-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--surface-dark-elevated);
+}
+
+.hero-code-dots {
+  display: flex;
+  gap: 7px;
+}
+
+.hero-code-dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background-color: var(--surface-dark-elevated);
+}
+
+.hero-code-dots i:first-child {
+  background-color: var(--coral);
+}
+
+.hero-code-file {
+  color: var(--on-dark-soft);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.hero-code-window pre {
+  margin: 0;
+  padding: var(--space-lg) 0;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  background-color: transparent;
+  counter-reset: line;
+  font-size: 0.8125rem;
+  line-height: 1.8;
+}
+
+.hero-code-window pre code {
+  display: block;
+}
+
+.hero-code-window .line {
+  display: block;
+  padding-right: var(--space-lg);
+  white-space: pre;
+}
+
+.hero-code-window .line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 46px;
+  margin-right: var(--space-md);
+  color: var(--muted-soft);
+  text-align: right;
+  user-select: none;
+}
+
+/* blinking cursor after the last line */
+.hero-code-window .line:last-of-type::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 1.1em;
+  margin-left: 2px;
+  background-color: var(--coral);
+  vertical-align: text-bottom;
+  animation: hero-cursor 1.1s steps(1) infinite;
+}
+
+@keyframes hero-cursor {
+  50% { opacity: 0; }
+}
+
+/* syntax accents: muted coral / teal / amber / gray (DESIGN.md code window) */
+.hero-code-window .tk-k { color: var(--coral); }
+.hero-code-window .tk-s { color: var(--accent-teal); }
+.hero-code-window .tk-f { color: var(--accent-amber); }
+
+.hero-code-window .tk-c {
+  color: var(--muted-soft);
+  font-style: italic;
+}
+
+/* hero with a plain image instead of code */
+@media (width >= 900px) {
+  .hero > div {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+
+  .hero:has(picture) > div {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero picture {
+    display: block;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .hero picture img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (width < 900px) {
+  .hero-code-window::before {
+    inset: -8% -5%;
+  }
+
+  .hero-code-window pre {
+    font-size: 0.75rem;
+  }
+
+  .hero-code-window .line::before {
+    width: 34px;
+    margin-right: var(--space-sm);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Home template: the cinematic scene
+ * ------------------------------------------------------------------------ */
+
+body.home main > .section:first-child {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height));
+  overflow: hidden;
+  background-color: var(--surface-abyss);
+  color: var(--on-dark-soft);
+}
+
+/* fixed, page-level video background — stays put while content scrolls over it */
+.page-video-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.page-video-media {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
   object-fit: cover;
+}
+
+/* global legibility scrim over the film */
+.page-video-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(16 15 14 / 74%), rgb(16 15 14 / 58%) 42%, rgb(16 15 14 / 80%));
+  pointer-events: none;
+}
+
+/* lift page content above the fixed film */
+body.has-video-bg {
+  background-color: var(--surface-abyss);
+}
+
+body.has-video-bg main,
+body.has-video-bg footer {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* video hero collapses to a single text column over the footage */
+body.home .hero.hero-has-video > div {
+  grid-template-columns: 1fr;
+}
+
+body.home .hero.hero-has-video > div > div {
+  max-width: 640px;
+}
+
+body.home .hero h1,
+body.home .hero p {
+  text-shadow: 0 2px 24px rgb(0 0 0 / 45%);
+}
+
+/* film grain over the scene */
+body.home main > .section:first-child::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.055;
+  pointer-events: none;
+}
+
+body.home .hero {
+  position: relative;
+  z-index: 2;
+}
+
+/* network constellation canvas behind everything */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
 }
 
-@media (width >= 900px) {
-  .hero {
-    padding: 40px 32px;
+/* aurora orbs drifting slowly */
+.hero-orb {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.hero-orb-coral {
+  top: -12%;
+  right: -6%;
+  width: 540px;
+  height: 540px;
+  background-color: rgb(204 120 92 / 30%);
+  animation: hero-drift 16s ease-in-out infinite alternate;
+}
+
+.hero-orb-teal {
+  bottom: -24%;
+  left: -10%;
+  width: 440px;
+  height: 440px;
+  background-color: rgb(93 184 166 / 16%);
+  animation: hero-drift 20s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes hero-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(56px, 36px) scale(1.12); }
+}
+
+/* headline entrance: words rise in sequence */
+body.home .hero h1 {
+  max-width: 12ch;
+  color: var(--on-dark);
+  font-size: clamp(3rem, 7.2vw, 6.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.hero h1 .w {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.4em);
+  animation: hero-word 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--wi) * 75ms + 150ms);
+}
+
+@keyframes hero-word {
+  to {
+    opacity: 1;
+    transform: none;
   }
+}
+
+body.home .hero .hero-kicker {
+  color: var(--on-dark-soft);
+  animation: hero-fade 0.9s ease both;
+}
+
+body.home .hero > div > div:first-child > p {
+  color: var(--on-dark-soft);
+  animation: hero-fade 0.9s ease 0.5s both;
+}
+
+body.home .hero > div > div:first-child > p.button-wrapper {
+  animation-delay: 0.7s;
+}
+
+@keyframes hero-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* code window floats on the dark scene; translate and transform stay separate
+   so the pointer tilt keeps working after the entrance */
+body.home .hero-code-window {
+  border: 1px solid rgb(255 255 255 / 9%);
+  background-color: #171614;
+  animation:
+    hero-window-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both,
+    hero-float 7s ease-in-out 1.6s infinite alternate;
+}
+
+@keyframes hero-window-in {
+  from {
+    opacity: 0;
+    translate: 0 28px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes hero-float {
+  from { translate: 0 0; }
+  to { translate: 0 -10px; }
+}
+
+body.home .hero p strong {
+  color: var(--on-dark);
+}
+
+/* scroll hint at the bottom of the scene */
+.hero-scroll {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  transform: translateX(-50%);
+  color: var(--muted-soft);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: hero-fade 1s ease 1.4s both;
+}
+
+.hero-scroll::after {
+  content: '';
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(var(--coral), transparent);
+  transform-origin: top;
+  animation: hero-scroll-line 2.2s ease-in-out infinite;
+}
+
+@keyframes hero-scroll-line {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(0.3);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@media (width < 900px) {
+  body.home main > .section:first-child {
+    min-height: 0;
+  }
+
+  body.home .hero h1 {
+    font-size: clamp(2.75rem, 11vw, 4rem);
+  }
+
+  .hero-orb-coral {
+    width: 340px;
+    height: 340px;
+  }
+
+  .hero-orb-teal {
+    width: 280px;
+    height: 280px;
+  }
+
+  .hero-scroll {
+    display: none;
+  }
+}
+
+/* content scrolls over the film: sections go transparent (coral stays), text light.
+   Placed last so specificity order stays ascending against the .hero rules. */
+body.has-video-bg main > .section:not(.coral) {
+  background-color: transparent;
+  color: var(--on-dark-soft);
+  text-shadow: 0 1px 14px rgb(0 0 0 / 55%);
+}
+
+body.has-video-bg main > .section:not(.coral) h1,
+body.has-video-bg main > .section:not(.coral) h2,
+body.has-video-bg main > .section:not(.coral) h3,
+body.has-video-bg main > .section:not(.coral) h4,
+body.has-video-bg main > .section:not(.coral) h5,
+body.has-video-bg main > .section:not(.coral) h6,
+body.has-video-bg main > .section:not(.coral) strong {
+  color: var(--on-dark);
 }

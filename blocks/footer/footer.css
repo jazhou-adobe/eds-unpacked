@@ -1,20 +1,95 @@
+/* footer: dark navy band that closes every page (DESIGN.md footer) */
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: var(--surface-dark);
 }
 
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+footer .footer {
+  box-sizing: border-box;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--section-space) var(--space-lg);
+  color: var(--on-dark-soft);
+  font-size: 0.875rem;
+}
+
+footer .footer .section {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+footer .footer .section > .default-content-wrapper {
+  min-width: 0;
+}
+
+footer .footer h2,
+footer .footer h3,
+footer .footer h4,
+footer .footer h5,
+footer .footer h6 {
+  margin: 0 0 var(--space-md);
+  color: var(--on-dark);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 
 footer .footer p {
+  margin: 0 0 var(--space-md);
+  line-height: 1.6;
+}
+
+footer .footer ul {
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer li {
+  margin-bottom: var(--space-sm);
+}
+
+footer .footer a:any-link {
+  color: var(--on-dark);
+  text-decoration: none;
+}
+
+footer .footer a:hover {
+  color: var(--coral);
+}
+
+/* wordmark: first link in the footer gets the serif brand treatment */
+footer .footer .section > .default-content-wrapper:first-child > p:first-child a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--on-dark);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+footer .footer .section > .default-content-wrapper:first-child > p:first-child a::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cline x1='12' y1='2.5' x2='12' y2='21.5'/%3E%3Cline x1='2.5' y1='12' x2='21.5' y2='12'/%3E%3Cline x1='5.3' y1='5.3' x2='18.7' y2='18.7'/%3E%3Cline x1='18.7' y1='5.3' x2='5.3' y2='18.7'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* copyright line */
+footer .footer .section:last-child > .default-content-wrapper:last-child > p:last-child {
+  margin-top: var(--space-xxl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--surface-dark-elevated);
+  font-size: 0.8125rem;
 }
 
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer .section {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-xxl);
   }
 }

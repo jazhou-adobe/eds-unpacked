@@ -1,30 +1,47 @@
+/* section-hub: dense reverse-chronological index rows, hairline separated */
 .section-hub-list {
-  list-style: none;
-  margin: 0;
+  max-width: 840px;
+  margin: var(--space-xl) 0 0;
   padding: 0;
+  list-style: none;
 }
 
 .section-hub-item {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  gap: 16px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--light-color);
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--hairline);
 }
 
-.section-hub-item a {
-  font-size: var(--body-font-size-m);
-  color: var(--text-color);
+.section-hub-item:first-child {
+  border-top: 1px solid var(--hairline);
+}
+
+.section-hub-item a:any-link {
+  color: var(--ink);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.4;
   text-decoration: none;
 }
 
 .section-hub-item a:hover {
-  color: var(--link-hover-color);
+  color: var(--coral-active);
 }
 
 .section-hub-item-meta {
-  font-size: var(--body-font-size-xs);
-  color: var(--dark-color);
-  white-space: nowrap;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+@media (width < 600px) {
+  .section-hub-item {
+    flex-direction: column;
+    gap: var(--space-xxs);
+    padding: var(--space-md) 0;
+  }
 }

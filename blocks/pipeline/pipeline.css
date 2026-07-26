@@ -1,0 +1,111 @@
+/* pipeline: document -> edge -> browser, animated flow connectors, sonar edge */
+.pipeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-lg);
+  max-width: 900px;
+  margin: var(--space-xxl) auto 0;
+  text-align: center;
+}
+
+.pipeline-node {
+  max-width: 220px;
+}
+
+.pipeline-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto var(--space-md);
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 50%;
+  background-color: var(--surface-dark-soft);
+  color: var(--coral);
+}
+
+.pipeline-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+/* sonar ring on the edge node */
+.pipeline-node-edge .pipeline-icon::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--coral);
+  border-radius: 50%;
+  animation: pipeline-pulse 2.6s ease-out infinite;
+}
+
+@keyframes pipeline-pulse {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+.pipeline-label {
+  margin: 0 0 var(--space-xs);
+  color: var(--on-dark);
+  font: var(--title-sm);
+}
+
+.pipeline-caption {
+  margin: 0;
+  color: var(--on-dark-soft);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* connector: coral dashes flowing toward the next node */
+.pipeline-connector {
+  flex: 1;
+  min-width: 40px;
+  max-width: 120px;
+  height: 2px;
+  margin-top: 41px;
+  background-image: repeating-linear-gradient(90deg, var(--coral) 0 10px, transparent 10px 22px);
+  background-size: 22px 2px;
+  opacity: 0.8;
+  animation: pipeline-flow 1.2s linear infinite;
+}
+
+@keyframes pipeline-flow {
+  to {
+    background-position-x: 44px;
+  }
+}
+
+@media (width < 900px) {
+  .pipeline {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .pipeline-connector {
+    flex: none;
+    width: 2px;
+    height: 40px;
+    margin: var(--space-md) 0;
+    background-image: repeating-linear-gradient(180deg, var(--coral) 0 10px, transparent 10px 22px);
+    background-size: 2px 22px;
+    animation: pipeline-flow-vertical 1.2s linear infinite;
+  }
+
+  @keyframes pipeline-flow-vertical {
+    to {
+      background-position-y: 44px;
+    }
+  }
+}
